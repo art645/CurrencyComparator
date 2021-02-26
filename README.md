@@ -9,7 +9,6 @@
 ## Как запустить:
 1. Импортируйте Gradle проект и запустите CurrencyComporatorApplication.java из IDE.
 2. http://localhost:8080/compare-currency-excgange/charcode/{name}
-Данное приложение поддерживает практически все виды символьных кодов валюты.
 
 ## Список основных символьных кодов и их наименований:
 - USD-Доллар США
