@@ -5,7 +5,6 @@ import com.CurrencyComporator.beans.GifBean;
 import com.CurrencyComporator.service.CurrencyComporatorServiceProxy;
 import com.CurrencyComporator.service.GifServiceProxy;
 import com.CurrencyComporator.service.GiphyServiceProxy;
-import jdk.swing.interop.SwingInterOpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
