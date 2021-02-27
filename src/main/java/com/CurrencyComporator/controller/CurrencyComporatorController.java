@@ -31,7 +31,7 @@ public class CurrencyComporatorController {
     @Autowired
     private GifServiceProxy gifProxy;
 
-    //getting broke or rich gif
+
     @GetMapping(value = "/compare-currency-excgange/charcode/{name}")
     public ResponseEntity<InputStreamResource> getGifByCurrencyChanges(@PathVariable String name) throws IOException {
         String query = getQueryGifPath(name);
@@ -42,6 +42,11 @@ public class CurrencyComporatorController {
     }
 
     public String getQueryGifPath(String name) {
+        String gifQuery = compareCurrency(name);
+        return  gifQuery;
+    }
+
+    public String compareCurrency(String name) {
         CurrencyBean responseLatest = currencyProxy.retrieveLatestCurrencies();
         CurrencyBean responseYesterday = currencyProxy.retrieveYesterdayCurrencies(getYesterdayDate(responseLatest.getTimestamp()));
         Map<String,Double> todayExchangeRates = responseLatest.getRates();
@@ -49,8 +54,14 @@ public class CurrencyComporatorController {
         Map<String,Double> yesterdayExchangeRates = responseYesterday.getRates();
         double todayCurrencyAmount = convertCurrencyToRub(todayExchangeRates,name);
         double yesterdayCurrencyAmount = convertCurrencyToRub(yesterdayExchangeRates,name);
-        String gifQuery = compareCurrency(todayCurrencyAmount,yesterdayCurrencyAmount);
-        return  gifQuery;
+        double changingRate = todayCurrencyAmount - yesterdayCurrencyAmount;
+        if (changingRate > 0) {
+            return  "rich";
+        }
+        else if (changingRate < 0) {
+            return  "broke";
+        }
+        return  "";
     }
 
     public Resource getResourceWithGif(String query) {
@@ -63,16 +74,6 @@ public class CurrencyComporatorController {
 
     public double convertCurrencyToRub(Map <String,Double> exchangeRates, String name) {
         return exchangeRates.get(name.toUpperCase())/exchangeRates.get("RUB");
-    }
-    public String compareCurrency(double todayCurrencyAmount, double yesterdayCurrencyAmount) {
-        double changingRate = todayCurrencyAmount - yesterdayCurrencyAmount;
-        if (changingRate > 0) {
-            return  "rich";
-        }
-        else if (changingRate < 0) {
-            return  "broke";
-        }
-        return  "";
     }
 
     public String getGifIdFromUrl(String url) {
