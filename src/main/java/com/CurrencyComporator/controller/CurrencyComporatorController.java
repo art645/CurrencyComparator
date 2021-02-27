@@ -5,6 +5,7 @@ import com.CurrencyComporator.beans.GifBean;
 import com.CurrencyComporator.service.CurrencyComporatorServiceProxy;
 import com.CurrencyComporator.service.GifServiceProxy;
 import com.CurrencyComporator.service.GiphyServiceProxy;
+import jdk.swing.interop.SwingInterOpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -74,7 +75,8 @@ public class CurrencyComporatorController {
     }
 
     public double convertCurrencyToRub(Map <String,Double> exchangeRates, String name) {
-        return exchangeRates.get(name.toUpperCase())/exchangeRates.get("RUB");
+        if (name.equals("RUB")) {return 1.0;}
+        return 1 / exchangeRates.get(name.toUpperCase())*exchangeRates.get("RUB");
     }
 
     public String getGifIdFromUrl(String url) {
@@ -89,6 +91,7 @@ public class CurrencyComporatorController {
         calendar.setTime(date);
         calendar.add(Calendar.DAY_OF_MONTH, -1);
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        System.out.println(dateFormat.format(calendar.getTime()));
         return dateFormat.format(calendar.getTime());
     }
 }
