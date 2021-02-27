@@ -28,6 +28,7 @@ public class TestClass {
         Map<String,Double> currenciesBaseUSD = new HashMap<>();
         currenciesBaseUSD.put("USD",1.0);
         currenciesBaseUSD.put("RUB",75.0);
-        assertEquals(currencyComporatorController.convertCurrencyToRub(currenciesBaseUSD,"USD"),0.013333333333333334);
+        currenciesBaseUSD.put("EUR",0.8);
+        assertEquals(currencyComporatorController.convertCurrencyToRub(currenciesBaseUSD,"EUR"),93.75);
     }
 }
