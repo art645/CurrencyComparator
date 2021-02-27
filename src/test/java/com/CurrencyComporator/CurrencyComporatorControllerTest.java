@@ -1,46 +1,72 @@
 package com.CurrencyComporator;
 
+import com.CurrencyComporator.beans.CurrencyBean;
 import com.CurrencyComporator.controller.CurrencyComporatorController;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.CurrencyComporator.service.CurrencyComporatorServiceProxy;
 import com.CurrencyComporator.service.GifServiceProxy;
 import com.CurrencyComporator.service.GiphyServiceProxy;;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
-@WebMvcTest(CurrencyComporatorController.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class CurrencyComporatorControllerTest {
 
-    @MockBean
-    private CurrencyComporatorServiceProxy currencyProxy;
-    @MockBean
-    private GifServiceProxy gifProxy;
-    @MockBean
-    private GiphyServiceProxy giphyProxy;
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
+    @InjectMocks
     CurrencyComporatorController currencyComporatorController;
+    @Mock
+    private CurrencyComporatorServiceProxy currencyProxy;
+    @Mock
+    private GifServiceProxy gifProxy;
+    @Mock
+    private GiphyServiceProxy giphyProxy;
 
-    void setup() {
-        this.mockMvc = MockMvcBuilders.standaloneSetup(currencyComporatorController).build();
-    }
 
     @Test
-    public void testReturn200AndContentType() throws Exception {
-        this.mockMvc.perform(get("/compare-currency-excgange/charcode/{USD}","USD"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.IMAGE_GIF));
+    public void test_compareCurrencyBroke() throws Exception {
+        Map<String,Double> todayCurrencies = new HashMap<>();
+        todayCurrencies.put("USD",1.0);
+        todayCurrencies.put("RUB",75.0);
+        Map<String,Double> yesterdayCurrencies = new HashMap<>();
+        yesterdayCurrencies.put("USD",1.0);
+        yesterdayCurrencies.put("RUB",73.0);
+        Mockito.when(currencyProxy.retrieveLatestCurrencies()).thenReturn(new CurrencyBean("USD",todayCurrencies,1614301200));
+        Mockito.when(currencyProxy.retrieveYesterdayCurrencies("2021-02-25")).thenReturn(new CurrencyBean("USD",yesterdayCurrencies,1312321));
+        Assert.assertEquals(currencyComporatorController.compareCurrency("USD"),"broke");
     }
-
+    @Test
+    public void test_compareCurrencyRich() throws Exception {
+        Map<String,Double> todayCurrencies = new HashMap<>();
+        todayCurrencies.put("USD",1.0);
+        todayCurrencies.put("RUB",73.0);
+        Map<String,Double> yesterdayCurrencies = new HashMap<>();
+        yesterdayCurrencies.put("USD",1.0);
+        yesterdayCurrencies.put("RUB",75.0);
+        Mockito.when(currencyProxy.retrieveLatestCurrencies()).thenReturn(new CurrencyBean("USD",todayCurrencies,1614301200));
+        Mockito.when(currencyProxy.retrieveYesterdayCurrencies("2021-02-25")).thenReturn(new CurrencyBean("USD",yesterdayCurrencies,1312321));
+        Assert.assertEquals(currencyComporatorController.compareCurrency("USD"),"rich");
+    }
+    @Test
+    public void test_CompareCurrencyEquals() {
+        Map<String,Double> todayCurrencies = new HashMap<>();
+        todayCurrencies.put("USD",1.0);
+        todayCurrencies.put("RUB",75.0);
+        Map<String,Double> yesterdayCurrencies = new HashMap<>();
+        yesterdayCurrencies.put("USD",1.0);
+        yesterdayCurrencies.put("RUB",75.0);
+        Mockito.when(currencyProxy.retrieveLatestCurrencies()).thenReturn(new CurrencyBean("USD",todayCurrencies,1614301200));
+        Mockito.when(currencyProxy.retrieveYesterdayCurrencies("2021-02-25")).thenReturn(new CurrencyBean("USD",yesterdayCurrencies,1312321));
+        Assert.assertEquals(currencyComporatorController.compareCurrency("USD"),"");
+    }
 }
 
