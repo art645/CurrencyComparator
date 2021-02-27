@@ -26,10 +26,6 @@ public class CurrencyComporatorControllerTest {
     CurrencyComporatorController currencyComporatorController;
     @Mock
     private CurrencyComporatorServiceProxy currencyProxy;
-    @Mock
-    private GifServiceProxy gifProxy;
-    @Mock
-    private GiphyServiceProxy giphyProxy;
 
 
     @Test
@@ -42,7 +38,7 @@ public class CurrencyComporatorControllerTest {
         yesterdayCurrencies.put("RUB",73.0);
         Mockito.when(currencyProxy.retrieveLatestCurrencies()).thenReturn(new CurrencyBean("USD",todayCurrencies,1614301200));
         Mockito.when(currencyProxy.retrieveYesterdayCurrencies("2021-02-25")).thenReturn(new CurrencyBean("USD",yesterdayCurrencies,1312321));
-        Assert.assertEquals(currencyComporatorController.compareCurrency("USD"),"broke");
+        Assert.assertEquals(currencyComporatorController.compareCurrency("USD"),"rich");
     }
     @Test
     public void test_compareCurrencyRich() throws Exception {
@@ -54,7 +50,7 @@ public class CurrencyComporatorControllerTest {
         yesterdayCurrencies.put("RUB",75.0);
         Mockito.when(currencyProxy.retrieveLatestCurrencies()).thenReturn(new CurrencyBean("USD",todayCurrencies,1614301200));
         Mockito.when(currencyProxy.retrieveYesterdayCurrencies("2021-02-25")).thenReturn(new CurrencyBean("USD",yesterdayCurrencies,1312321));
-        Assert.assertEquals(currencyComporatorController.compareCurrency("USD"),"rich");
+        Assert.assertEquals(currencyComporatorController.compareCurrency("USD"),"broke");
     }
     @Test
     public void test_CompareCurrencyEquals() {
