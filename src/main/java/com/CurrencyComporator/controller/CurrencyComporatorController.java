@@ -35,6 +35,7 @@ public class CurrencyComporatorController {
     @GetMapping(value = "/compare-currency-excgange/charcode/{name}")
     public ResponseEntity<InputStreamResource> getGifByCurrencyChanges(@PathVariable String name) throws IOException {
         String query = getQueryGifPath(name);
+        System.out.println(query);
         if (query.equals("")) {return  null;}
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_GIF)
@@ -45,12 +46,12 @@ public class CurrencyComporatorController {
         String gifQuery = compareCurrency(name);
         return  gifQuery;
     }
-
     public String compareCurrency(String name) {
         CurrencyBean responseLatest = currencyProxy.retrieveLatestCurrencies();
-        CurrencyBean responseYesterday = currencyProxy.retrieveYesterdayCurrencies(getYesterdayDate(responseLatest.getTimestamp()));
+        String yesterdayDate = getYesterdayDate(responseLatest.getTimestamp());
+        CurrencyBean responseYesterday = currencyProxy.retrieveYesterdayCurrencies(yesterdayDate);
         Map<String,Double> todayExchangeRates = responseLatest.getRates();
-        if(!(todayExchangeRates.containsKey(name))) {return "";}
+        if(!(todayExchangeRates.containsKey(name.toUpperCase()))) {return "";}
         Map<String,Double> yesterdayExchangeRates = responseYesterday.getRates();
         double todayCurrencyAmount = convertCurrencyToRub(todayExchangeRates,name);
         double yesterdayCurrencyAmount = convertCurrencyToRub(yesterdayExchangeRates,name);
