@@ -35,7 +35,6 @@ public class CurrencyComporatorController {
     @GetMapping(value = "/compare-currency-excgange/charcode/{name}")
     public ResponseEntity<InputStreamResource> getGifByCurrencyChanges(@PathVariable String name) throws IOException {
         String query = getQueryGifPath(name);
-        System.out.println(query);
         if (query.equals("")) {return  null;}
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_GIF)
@@ -90,7 +89,6 @@ public class CurrencyComporatorController {
         calendar.setTime(date);
         calendar.add(Calendar.DAY_OF_MONTH, -1);
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        System.out.println(dateFormat.format(calendar.getTime()));
         return dateFormat.format(calendar.getTime());
     }
 }

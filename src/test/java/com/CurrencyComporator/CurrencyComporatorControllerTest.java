@@ -36,6 +36,7 @@ public class CurrencyComporatorControllerTest {
         Map<String,Double> yesterdayCurrencies = new HashMap<>();
         yesterdayCurrencies.put("USD",1.0);
         yesterdayCurrencies.put("RUB",73.0);
+        
         Mockito.when(currencyProxy.retrieveLatestCurrencies()).thenReturn(new CurrencyBean("USD",todayCurrencies,1614301200));
         Mockito.when(currencyProxy.retrieveYesterdayCurrencies("2021-02-25")).thenReturn(new CurrencyBean("USD",yesterdayCurrencies,1312321));
         Assert.assertEquals(currencyComporatorController.compareCurrency("USD"),"rich");
