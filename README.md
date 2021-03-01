@@ -7,8 +7,11 @@
 
 
 ## Как запустить:
-1. Импортируйте Gradle проект и запустите CurrencyComporatorApplication.java из IDE.
+1.1 Импортируйте Gradle проект и запустите CurrencyComporatorApplication.java из IDE.
+1.2 В командной строке введите следующее : docker run -d -p 8080:8080 aefanov05/currencycomparator:1.0.0
 2. http://localhost:8080/compare-currency-excgange/charcode/{name}
+Где {name} - символьный код валюты
+
 
 ## Список основных символьных кодов и их наименований:
 - USD-Доллар США
